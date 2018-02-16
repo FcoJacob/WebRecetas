@@ -14,17 +14,15 @@ class CreateRecipesTable extends Migration
     public function up()
     {
         Schema::create('recipes', function (Blueprint $table) {
-            $table->increments('id');
+            $table->integer('idReceta')->autoIncrement();            
             $table->string('autor', 120);
             $table->integer('valoracion')->nullable();
             $table->string('breveDescripcion', 140);
             $table->integer('cantidad')->nullable();
             $table->string('ingredientes', 400);            
             $table->string('elaboracion', 500);
-            $table->string('consejo', 500);
-            $table->binary('imagen');
-            $table->string('tipoImagen', 20);
-            $table->timestamps();
+            $table->string('consejo', 500);            
+            $table->timestamps();                       
         });
     }
 

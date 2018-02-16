@@ -19,4 +19,4 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('recipes', 'RecipesController@index',['except' => ['create', 'show', 'edit']]);
+Route::resource('recipes', 'RecipesController',['except' => ['create', 'show', 'edit']]);

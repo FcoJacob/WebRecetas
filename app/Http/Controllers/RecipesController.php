@@ -3,6 +3,7 @@
 namespace RecipesOfKitchen\Http\Controllers;
 
 use Illuminate\Http\Request;
+use RecipesOfKitchen\Recipes;
 
 class RecipesController extends Controller
 {
@@ -11,9 +12,21 @@ class RecipesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $recipe = Recipes::orderBy('idReceta', 'DESC')->paginate(8);
+
+        return [
+            'pagination' => [
+                'total'         => $recipe->total(),
+                'current_page'  => $recipe->currentPage(),
+                'per_page'      => $recipe->perPage(),
+                'last_page'     => $recipe->lastPage(),
+                'from'          => $recipe->firstItem(),
+                'to'            => $recipe->lastItem(),
+            ],
+            'recipes' => $recipe
+        ];
     }
 
     /**
@@ -23,7 +36,7 @@ class RecipesController extends Controller
      */
     public function create()
     {
-        //
+        //Formulario
     }
 
     /**
@@ -34,7 +47,25 @@ class RecipesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'id' => 'required'
+        ]);          
+        
+        $receta = new Recipes();
+        $nota->autor = $request->input('autor');
+        $nota->valoracion = $request->input('valoracion');
+        $nota->breveDescripcion = $request->textarea('breveDesc');
+        $nota->cantidad = $request->input('cantidad');
+        $nota->ingredientes = $request->textarea('ingrediente');
+        $nota->elaboracion = $request->textarea('elaboracion');
+        $nota->consejo = $request->textarea('consejo');
+        $nota->save();
+
+        $path = $request->file('imagen')->storeAs(
+            'imagenes', $request->user()->id
+        ); 
+
+        return;
     }
 
     /**
@@ -56,7 +87,10 @@ class RecipesController extends Controller
      */
     public function edit($id)
     {
-        //
+        //Formulario con datis
+        $recipe = Recipes::findOrFail($id);
+
+        return $recipe;
     }
 
     /**
@@ -68,7 +102,13 @@ class RecipesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'id' => 'required',
+        ]);
+
+        Recipes::find($id)->update($request->all());
+
+        return;
     }
 
     /**
@@ -79,6 +119,7 @@ class RecipesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $recipe = Recipes::findOrFail($id);
+        $recipe->delete();
     }
 }

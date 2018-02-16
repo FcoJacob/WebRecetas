@@ -4,7 +4,7 @@ namespace RecipesOfKitchen;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Recipes extends Model
+class imagenes extends Model
 {
-    protected $fillable = ['id', 'autor'];
+    protected $fillable = ['idImagen', 'id'];
 }

@@ -7,11 +7,17 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <link rel="icon" type="image/png" href="favicon.png">
     <title>Recipes Of Kitchen</title>
-
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Styles -->     
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">    
+    <style>
+        #valoracion{
+            display:flex;
+            list-style: none;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -62,7 +68,7 @@
         </main>
     </div>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <!-- Scripts -->    
+    <script src="{{ asset('js/app.js') }}"></script>    
 </body>
 </html>
