@@ -5,15 +5,56 @@ require('es6-shim');
 import Vue from 'vue';
 import axios from 'axios';
 
-const Recetas = {
-    receta: [],    
-    template: `<div>
-                    <ul class="cardslider__cards">
-                        <li class="cardslider__card cardslider__card--transitions false cardslider__card--index-7">🍕</li>
-                        <li>🍔</li>
-                    </ul> 
-                </div>`
-};
+var receta = {receta: null};
+
+Vue.component('receta', {
+    template: ` <div class='container'>
+                    <div class='row'>
+                        <div class='col-6'>
+                            <img v-bind:src="'data:image/jpeg;base64,'+receta.imagen" height='400px' style='width: 100%;object-fit: fill;'>
+                        </div>
+                        <div class='col-6'>
+                            <div class='row'>
+                                <div class='col'>
+                                    <h6><strong>Autor: </strong> {{ receta.autor }}</h6>
+                                </div>
+                                <div class='col'>
+                                    <p>Última actualización: </p>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col'>
+                                    <ul id="valoracion">
+                                        <li v-for="star in receta.valoracion" v-if="star > 0" style='list-style:none;'><i class="material-icons" style="color: orange;font-size:large;">star</i></li>
+                                    </ul>                                     
+                                </div>
+                                <div class='col'>
+                                    <p>2018-02-22</p>
+                                </div>                            
+                            </div>
+                            <div class='row'>
+                                <h5>Ingredientes: </h5>
+                            </div>
+                            <div class='row'>                                
+                                <ul style='list-style:none;'>
+                                    <li v-for="value in receta.ingredientes.split(',')" :key='value'>{{ value }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <h5 style='margin-top: 20px; margin-left: 20px;text-decoration:underline;'>Elaboración: </h5>
+                    </div>
+                    <div class='row'>
+                        <p style='text-indent: 40px;text-align: justify;font-family: Roboto;margin-left: 20px;'>{{ receta.elaboracion }}</p>
+                    </div>
+                </div>`,
+    
+    data: function () {
+        console.log('data');
+        return receta;
+    }
+});
 
 new Vue({
     el: '#crud',
@@ -39,7 +80,7 @@ new Vue({
         consejo: '',
         imagen: '',
         errors: [],
-        fillKeep: {'id': '', 'autor': '', 'valoracion': '', 'breveDesc': '', 'cantidad': '', 'ingrediente': '', 'elaboracion': '', 'consejo': '', 'imagen': ''},
+        fillKeep: {'idReceta': '', 'autor': '', 'valoracion': '', 'breveDescripcion': '', 'cantidad': '', 'ingredientes': '', 'elaboracion': '', 'consejo': '', 'imagen': ''},
         offset: 1
     },
     computed: {
@@ -73,15 +114,15 @@ new Vue({
         getKeeps: function(page) {
             var urlKeeps = 'recipes?page='+page;
             axios.get(urlKeeps).then(response => {
-                this.keeps = response.data.recipes.data;
-                this.pagination = response.data.pagination;
+                console.log(response.data.recipes);
+                this.keeps = response.data.recipes;
+                this.pagination = response.data.pagination;                
             });
         },
         editKeep: function(keep) {
             this.fillKeep.id = keep.id;
             this.fillKeep.keep = keep.keep;
             $('#edit').modal('show');
-
         },
         updateKeep: function(id) {
             var url = 'recipes/'+id;
@@ -97,7 +138,7 @@ new Vue({
         },
         deleteKeep: function(keep){
             var url = 'recipes/'+keep.id;
-            axios.delete(url).then(response => {  //eliminamos
+            axios.delete(url).then(response => {            //eliminamos
                 this.getKeeps();                            //listamos
                 toastr.success('Eliminado correctamente');  //mensaje
             });
@@ -116,23 +157,22 @@ new Vue({
                 this.elaboracion = '',
                 this.consejo = '',
                 this.imagen = '',
-                this.errors = [];
+                this.errors = [],
                 $('#create').modal('hide');
                 toastr.success('Nueva tarea creada con exito');
             }).catch(error => {
                 this.errors = error.response.data;
             });
         },
-        showKeep: function(idReceta) {            
-            Recetas.receta = this.keeps
-            console.log(Recetas.receta)
+        showKeep: function(idReceta) {  
+            receta.receta = this.keeps.find(function(element) {
+                return element.idReceta == idReceta;
+            });
+            console.log(receta);
         },
         changePage: function(page) {
             this.pagination.current_page = page;
             this.getKeeps(page);
         }
-    },
-    components: {        
-        'receta': Recetas,        
-    }
+    }    
 });

@@ -20,12 +20,13 @@ class CreateRecipesTable extends Migration
             $table->string('breveDescripcion', 140);
             $table->integer('cantidad')->nullable();
             $table->string('ingredientes', 400);            
-            $table->string('elaboracion', 500);
-            $table->string('consejo', 500);            
+            $table->string('elaboracion', 2000);
+            $table->string('consejo', 500);   
+            $table->binary('imagen');                   
             $table->timestamps();                       
         });
     }
-
+    //'imagen' => "data:imagen/jpg;base64,".base64_encode($recipe->imagen),
     /**
      * Reverse the migrations.
      *

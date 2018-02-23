@@ -15,8 +15,23 @@ class RecipesController extends Controller
     public function index(Request $request)
     {
         $recipe = Recipes::orderBy('idReceta', 'DESC')->paginate(8);
-
+        $recipes =  [];
+        foreach ($recipe as $rec){
+            $recipes[] = [
+                'idReceta'          => $rec->idReceta,
+                'autor'             => $rec->autor,
+                'valoracion'        => $rec->valoracion,
+                'breveDescripcion'  => $rec->breveDescripcion,
+                'cantidad'          => $rec->cantidad,
+                'ingredientes'      => $rec->ingredientes,
+                'elaboracion'       => $rec->elaboracion,
+                'consejo'           => $rec->consejo,
+                'imagen'            => base64_encode($rec->imagen),
+                'updated_at'        => $rec->updated_at
+            ];
+        }        
         return [
+           // 'imagen' => "data:imagen/jpg;base64,".base64_encode($recipe->imagen),
             'pagination' => [
                 'total'         => $recipe->total(),
                 'current_page'  => $recipe->currentPage(),
@@ -24,8 +39,8 @@ class RecipesController extends Controller
                 'last_page'     => $recipe->lastPage(),
                 'from'          => $recipe->firstItem(),
                 'to'            => $recipe->lastItem(),
-            ],
-            'recipes' => $recipe
+            ],            
+            'recipes' => $recipes
         ];
     }
 
@@ -48,22 +63,19 @@ class RecipesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'id' => 'required'
+            'idReceta' => 'required'
         ]);          
         
         $receta = new Recipes();
         $nota->autor = $request->input('autor');
         $nota->valoracion = $request->input('valoracion');
-        $nota->breveDescripcion = $request->textarea('breveDesc');
+        $nota->breveDescripcion = $request->textarea('breveDescripcion');
         $nota->cantidad = $request->input('cantidad');
-        $nota->ingredientes = $request->textarea('ingrediente');
+        $nota->ingredientes = $request->textarea('ingredientes');
         $nota->elaboracion = $request->textarea('elaboracion');
         $nota->consejo = $request->textarea('consejo');
-        $nota->save();
-
-        $path = $request->file('imagen')->storeAs(
-            'imagenes', $request->user()->id
-        ); 
+        $nota->imagen = base64_encode(file_get_contents($request->file('imagen')));        
+        $nota->save();       
 
         return;
     }

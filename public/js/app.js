@@ -983,10 +983,16 @@ __webpack_require__(11);
 
 
 
-var Recetas = {
-    receta: [],
-    template: '<div class="my-slider cardslider cardslider cardslider--direction-down">\n                    <ul class="cardslider__cards">\n                        <li class="cardslider__card cardslider__card--transitions false cardslider__card--index-7">\uD83C\uDF55</li>\n                        <li>\uD83C\uDF54</li>\n                    </ul> \n                </div>'
-};
+var receta = { receta: null };
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('receta', {
+    template: ' <div class=\'container\'>\n                    <div class=\'row\'>\n                        <div class=\'col-6\'>\n                            <img v-bind:src="\'data:image/jpeg;base64,\'+receta.imagen" height=\'400px\' style=\'width: 100%;object-fit: fill;\'>\n                        </div>\n                        <div class=\'col-6\'>\n                            <div class=\'row\'>\n                                <div class=\'col\'>\n                                    <h6><strong>Autor: </strong> {{ receta.autor }}</h6>\n                                </div>\n                                <div class=\'col\'>\n                                    <p>\xDAltima actualizaci\xF3n: </p>\n                                </div>\n                            </div>\n                            <div class=\'row\'>\n                                <div class=\'col\'>\n                                    <ul id="valoracion">\n                                        <li v-for="star in receta.valoracion" v-if="star > 0" style=\'list-style:none;\'><i class="material-icons" style="color: orange;font-size:large;">star</i></li>\n                                    </ul>                                     \n                                </div>\n                                <div class=\'col\'>\n                                    <p>2018-02-22</p>\n                                </div>                            \n                            </div>\n                            <div class=\'row\'>\n                                <h5>Ingredientes: </h5>\n                            </div>\n                            <div class=\'row\'>                                \n                                <ul style=\'list-style:none;\'>\n                                    <li v-for="value in receta.ingredientes.split(\',\')" :key=\'value\'>{{ value }}</li>\n                                </ul>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\'row\'>\n                        <h5 style=\'margin-top: 20px; margin-left: 20px;text-decoration:underline;\'>Elaboraci\xF3n: </h5>\n                    </div>\n                    <div class=\'row\'>\n                        <p style=\'text-indent: 40px;text-align: justify;font-family: Roboto;margin-left: 20px;\'>{{ receta.elaboracion }}</p>\n                    </div>\n                </div>',
+
+    data: function data() {
+        console.log('data');
+        return receta;
+    }
+});
 
 new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     el: '#crud',
@@ -1012,7 +1018,7 @@ new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
         consejo: '',
         imagen: '',
         errors: [],
-        fillKeep: { 'id': '', 'autor': '', 'valoracion': '', 'breveDesc': '', 'cantidad': '', 'ingrediente': '', 'elaboracion': '', 'consejo': '', 'imagen': '' },
+        fillKeep: { 'idReceta': '', 'autor': '', 'valoracion': '', 'breveDescripcion': '', 'cantidad': '', 'ingredientes': '', 'elaboracion': '', 'consejo': '', 'imagen': '' },
         offset: 1
     },
     computed: {
@@ -1048,7 +1054,8 @@ new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 
             var urlKeeps = 'recipes?page=' + page;
             __WEBPACK_IMPORTED_MODULE_1_axios___default.a.get(urlKeeps).then(function (response) {
-                _this.keeps = response.data.recipes.data;
+                console.log(response.data.recipes);
+                _this.keeps = response.data.recipes;
                 _this.pagination = response.data.pagination;
             });
         },
@@ -1099,24 +1106,22 @@ new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
                 keep: this.autor
             }).then(function (response) {
                 _this4.getKeeps();
-                _this4.autor = '', _this4.valoracion = 0, _this4.breveDescripcion = '', _this4.cantidad = 0, _this4.ingrediente = '', _this4.elaboracion = '', _this4.consejo = '', _this4.imagen = '', _this4.errors = [];
-                $('#create').modal('hide');
+                _this4.autor = '', _this4.valoracion = 0, _this4.breveDescripcion = '', _this4.cantidad = 0, _this4.ingrediente = '', _this4.elaboracion = '', _this4.consejo = '', _this4.imagen = '', _this4.errors = [], $('#create').modal('hide');
                 toastr.success('Nueva tarea creada con exito');
             }).catch(function (error) {
                 _this4.errors = error.response.data;
             });
         },
         showKeep: function showKeep(idReceta) {
-            Recetas.receta = this.keeps;
-            console.log(Recetas.receta);
+            receta.receta = this.keeps.find(function (element) {
+                return element.idReceta == idReceta;
+            });
+            console.log(receta);
         },
         changePage: function changePage(page) {
             this.pagination.current_page = page;
             this.getKeeps(page);
         }
-    },
-    components: {
-        'receta': Recetas
     }
 });
 

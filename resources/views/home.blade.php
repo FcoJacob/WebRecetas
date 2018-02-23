@@ -15,14 +15,12 @@
 
                     Bienvenido a Recipes of Kitchen, disfrute de la comida!
                     
-                    <receta style="margin: 20px auto;"></receta>
+                    <receta style="margin-top: 30px;"></receta>
                 </div>
             </div>
-        </div>
-        <br> 
-        <hr> 
-        <br>      
-        <div class="col-sm-12">
+        </div>        
+        <hr>              
+        <div class="col-sm-12" style="margin-top: 50px;">
             <h1>Lista de recetas</h1>
             <hr>
         </div>   
@@ -40,20 +38,20 @@
                     </tr>
                 </thead> 
                 <tbody>
-                    <tr v-for="recipe in keeps" :key="recipe.idReceta" v-on:click="showKeep(recipe.idReceta)">
-                        <td width="10px">@{{ recipe.autor }}</td>
-                        <td align="center" v-if="recipe.valoracion > 0">
+                    <tr v-for="recipes in keeps" :key="recipes.idReceta">
+                        <td width="10px">@{{ recipes.autor }}</td>
+                        <td align="center" v-if="recipes.valoracion > 0">
                         <ul id="valoracion">
-                            <li v-for="star in recipe.valoracion" v-if="star > 0"><i class="material-icons" style="color: orange;">star</i></li>
+                            <li v-for="star in recipes.valoracion" v-if="star > 0"><i class="material-icons" style="color: orange;">star</i></li>
                         </ul>  
                         </td>
                         <td align="center" v-else>Sin Valorar</td>
-                        <td>@{{ recipe.breveDescripcion }}</td>
+                        <td v-on:click="showKeep(recipes.idReceta)">@{{ recipes.breveDescripcion }}</td>
                         <td width="10px">
-                            <a href="#" class="btn btn-warning btn-sm" v-on:click.prevent="editKeep(recipe)">Editar</a>
+                            <a href="#" class="btn btn-warning btn-sm" v-on:click.prevent="editKeep(recipes)">Editar</a>
                         </td>
                         <td width="10px">
-                            <a href="#" class="btn btn-danger btn-sm" v-on:click.prevent="deleteKeep(recipe)">Eliminar</a>
+                            <a href="#" class="btn btn-danger btn-sm" v-on:click.prevent="deleteKeep(recipes)">Eliminar</a>
                         </td>
                     </tr>
                 </tbody>
