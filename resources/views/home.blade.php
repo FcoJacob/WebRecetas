@@ -4,20 +4,9 @@
 <div class="container">     
     <div id="crud" class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card card-default">
-                <div class="card-header">Recetas</div>
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif    
 
-                    Bienvenido a Recipes of Kitchen, disfrute de la comida!
-                    
-                    <receta style="margin-top: 30px;"></receta>
-                </div>
-            </div>
+            <receta style="margin-top: 30px;"></receta>
+                
         </div>        
         <hr>              
         <div class="col-sm-12" style="margin-top: 50px;">

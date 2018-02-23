@@ -1,4 +1,5 @@
-<form method="post" v-on:submit.prevent="createKeep">
+<form method="post" v-on:submit.prevent="createKeep()">
+    {{csrf_field ()}}
     <div class="modal fade" id="create">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -43,7 +44,7 @@
                         <div class="col-8">
                         <div class="form-group">
                             <label for="breveDesc">Breve Descripción</label>
-                            <textarea class="form-control" name="breveDescr" id="breveDesc" rows="1"></textarea>
+                            <textarea class="form-control" name="breveDescripcion" id="breveDesc" rows="1"></textarea>
                         </div>
                         </div>  
                         <div class="col-4">
@@ -54,7 +55,7 @@
                     <hr>                            
                     <div class="form-group">
                         <label for="ingrediente">Ingredientes <span style="font-size: 12px">(utilice (,) despues de cada linea)</span></label>
-                        <textarea class="form-control" name="ingrediente" id="ingrediente" rows="3"></textarea>
+                        <textarea class="form-control" name="ingredientes" id="ingredientes" rows="3"></textarea>
                     </div> 
                     <div class="form-group">
                         <label for="elaboracion">Elaboración</label>

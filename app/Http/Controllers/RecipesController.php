@@ -14,7 +14,7 @@ class RecipesController extends Controller
      */
     public function index(Request $request)
     {
-        $recipe = Recipes::orderBy('idReceta', 'DESC')->paginate(8);
+        $recipe = Recipes::orderBy('idReceta', 'DESC')->paginate(1);
         $recipes =  [];
         foreach ($recipe as $rec){
             $recipes[] = [
@@ -62,20 +62,21 @@ class RecipesController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        /*$this->validate($request, [
             'idReceta' => 'required'
-        ]);          
-        
+        ]);    */      
+        $file = base64_encode(file_get_contents($request->file('imagen')));
+
         $receta = new Recipes();
-        $nota->autor = $request->input('autor');
-        $nota->valoracion = $request->input('valoracion');
-        $nota->breveDescripcion = $request->textarea('breveDescripcion');
-        $nota->cantidad = $request->input('cantidad');
-        $nota->ingredientes = $request->textarea('ingredientes');
-        $nota->elaboracion = $request->textarea('elaboracion');
-        $nota->consejo = $request->textarea('consejo');
-        $nota->imagen = base64_encode(file_get_contents($request->file('imagen')));        
-        $nota->save();       
+        $receta->autor = $request->input('autor');
+        $receta->valoracion = $request->input('valoracion');
+        $receta->breveDescripcion = $request->input('breveDescripcion');
+        $receta->cantidad = $request->input('cantidad');
+        $receta->ingredientes = $request->input('ingredientes');
+        $receta->elaboracion = $request->input('elaboracion');
+        $receta->consejo = $request->input('consejo');
+        $receta->imagen = $file;        
+        $receta->save();       
 
         return;
     }
@@ -83,10 +84,10 @@ class RecipesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $idReceta
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($idReceta)
     {
         //
     }
@@ -94,13 +95,13 @@ class RecipesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $idReceta
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($idReceta)
     {
         //Formulario con datis
-        $recipe = Recipes::findOrFail($id);
+        $recipe = Recipes::findOrFail($idReceta);
 
         return $recipe;
     }
@@ -109,16 +110,16 @@ class RecipesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $idReceta
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $this->validate($request, [
-            'id' => 'required',
+            'idReceta' => 'required',
         ]);
 
-        Recipes::find($id)->update($request->all());
+        Recipes::find($request->idReceta)->update($request->all());
 
         return;
     }
@@ -126,12 +127,12 @@ class RecipesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $idReceta
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($idReceta)
     {
-        $recipe = Recipes::findOrFail($id);
+        $recipe = Recipes::findOrFail($idReceta);        
         $recipe->delete();
     }
 }
